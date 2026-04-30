@@ -28,12 +28,26 @@
             let url = "https://bsarmah7.github.io/qr-page/view.html?data=" + encodeURIComponent(data);
 
             document.getElementById("qrcode").innerHTML = "";
-
-            qr = new QRCode(document.getElementById("qrcode"), {
+            
+            let tempDiv = document.createElement("div");
+            
+            let qr = new QRCode(tempDiv, {
                 text: url,
-                width: 200,
-                height: 200
+                width: 220,
+                height: 220
             });
+
+            setTimeout(() => {
+                qrCanvas = tempDiv.querySelector("canvas");
+
+                let img = document.createElement("img");
+                img.src = qrCanvas.toDataURL("image/png");
+                img.style.width = "220px";
+                
+                let container = document.getElementById("qrcode");
+                container.innerHTML = "";
+                container.appendChild(img);
+            }, 300);
         }
 
         function downloadQR() {

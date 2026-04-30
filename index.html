@@ -1,10 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>QR Info Page</title>
+    <title>QR Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
-<body>
-    <h1>Device Information</h1>
-    <p>This data is coming from QR code scan.</p>
+
+<body style="text-align:center; font-family:Arial;">
+
+    <h2>QR Code Generator</h2>
+
+    <input type="text" id="text" placeholder="Enter your text" style="width:250px; padding:8px;">
+    <br><br>
+
+    <button onclick="generateQR()">Generate QR</button>
+
+    <div id="qrcode" style="margin-top:20px;"></div>
+
+    <br>
+    <button onclick="downloadQR()">Download</button>
+
+    <script>
+        let qr;
+
+        function generateQR() {
+            let data = document.getElementById("text").value;
+
+            let url = "https://bsarmah7.github.io/qr-page/view.html?data=" + encodeURIComponent(data);
+
+            document.getElementById("qrcode").innerHTML = "";
+
+            qr = new QRCode(document.getElementById("qrcode"), {
+                text: url,
+                width: 200,
+                height: 200
+            });
+        }
+
+        function downloadQR() {
+            let img = document.querySelector("#qrcode img");
+
+            if (!img) {
+                alert("Generate QR first!");
+                return;
+            }
+
+            let link = document.createElement("a");
+            link.href = img.src;
+            link.download = "qr_code.png";   // PNG download
+            link.click();
+        }
+    </script>
+
 </body>
 </html>

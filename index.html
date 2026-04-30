@@ -37,17 +37,21 @@
         }
 
         function downloadQR() {
-            let img = document.querySelector("#qrcode img");
+            let canvas = document.querySelector("#qrcode canvas");
 
-            if (!img) {
+            if (!canvas) {
                 alert("Generate QR first!");
                 return;
             }
 
+            let image = canvas.toDataURL("image/png");
             let link = document.createElement("a");
             link.href = img.src;
             link.download = "qr_code.png";   // PNG download
+
+            document.body.appendChild(link);
             link.click();
+            document.body.removeChild(link);
         }
     </script>
 

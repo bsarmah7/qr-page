@@ -1,103 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
+    <title>QR Generator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Text Share</title>
-    <!-- Using a more reliable CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/davidshimjs-qrcodejs@0.0.2/qrcode.min.js"></script>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 20px; background: #f4f7f6; }
-        .container { max-width: 400px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        textarea { width: 100%; height: 100px; border-radius: 8px; border: 1px solid #ddd; padding: 10px; box-sizing: border-box; margin-bottom: 15px; }
-        button { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 10px; }
-        #qrcode { margin: 20px auto; display: flex; justify-content: center; }
-        #qrcode img { border: 10px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
-        .hidden { display: none; }
-        .download-btn { background: #007bff; }
-        #display-text { background: #e9ecef; padding: 20px; border-radius: 8px; word-wrap: break-word; }
-    </style>
 </head>
-<body>
 
-    <div class="container">
-        <!-- GENERATOR UI -->
-        <div id="generator-ui">
-            <h2>Create QR Message</h2>
-            <textarea id="text-input" placeholder="Enter text here..."></textarea>
-            <button onclick="generateQR()">Generate QR Code</button>
-            
-            <div id="qrcode"></div>
-            
-            <button id="dl-btn" class="hidden download-btn" onclick="downloadQR()">Download as PNG</button>
-        </div>
+<body style="text-align:center; font-family:Arial; padding:20px;">
 
-        <!-- READER UI -->
-        <div id="reader-ui" class="hidden">
-            <h2>Scanned Message:</h2>
-            <div id="display-text"></div>
-            <br>
-            <button class="download-btn" onclick="window.location.search=''">Create New</button>
-        </div>
-    </div>
+    <h2>QR Code Generator</h2>
+
+    <input type="text" id="text" placeholder="Enter your text" style="padding:10px; width:250px;">
+    <br><br>
+
+    <button onclick="generateQR()">Generate QR</button>
+
+    <div id="qrcode" style="margin-top:20px;"></div>
 
     <script>
-        let qrContainer = document.getElementById("qrcode");
-        let qrGenerator;
-
-        // 1. Check if we are viewing a message
-        window.onload = function() {
-            const params = new URLSearchParams(window.location.search);
-            const msg = params.get('msg');
-            
-            if (msg) {
-                document.getElementById('generator-ui').classList.add('hidden');
-                document.getElementById('reader-ui').classList.remove('hidden');
-                document.getElementById('display-text').innerText = decodeURIComponent(msg);
-            }
-        };
-
-        // 2. Generate QR
         function generateQR() {
-            const text = document.getElementById('text-input').value;
-            if (!text) return alert("Type something first!");
+            let data = document.getElementById("text").value.trim();
 
-            qrContainer.innerHTML = ""; // Clear existing QR
-            
-            // Create the URL with the message
-            const currentUrl = window.location.origin + window.location.pathname;
-            const fullLink = currentUrl + "?msg=" + encodeURIComponent(text);
-
-            qrGenerator = new QRCode(qrContainer, {
-                text: fullLink,
-                width: 200,
-                height: 200,
-                correctLevel: QRCode.CorrectLevel.H
-            });
-
-            document.getElementById('dl-btn').classList.remove('hidden');
-        }
-
-        // 3. Download Logic
-        function downloadQR() {
-            // qrcode.js generates either a canvas or an image depending on the browser
-            const img = qrContainer.querySelector('img');
-            const canvas = qrContainer.querySelector('canvas');
-            
-            let dataUrl;
-            if (img && img.src) {
-                dataUrl = img.src;
-            } else if (canvas) {
-                dataUrl = canvas.toDataURL("image/png");
+            if (!data) {
+                alert("Enter text first");
+                return;
             }
 
-            if (dataUrl) {
-                const link = document.createElement('a');
-                link.href = dataUrl;
-                link.download = 'qr-message.png';
-                link.click();
-            }
+            let url = "https://bsarmah7.github.io/qr-page/view.html?data=" + encodeURIComponent(data);
+
+            let qrImageURL = "https://chart.googleapis.com/chart?cht=qr&chs=220x220&chl=" + encodeURIComponent(url);
+
+            document.getElementById("qrcode").innerHTML =
+                `<img src="${qrImageURL}" style="margin-top:20px;">`;
         }
     </script>
+
 </body>
 </html>

@@ -27,7 +27,7 @@
 
             let url = "https://bsarmah7.github.io/qr-page/view.html?data=" + encodeURIComponent(data);
 
-            let qrImageURL = "https://chart.googleapis.com/chart?cht=qr&chs=220x220&chl=" + encodeURIComponent(url);
+            let qrImageURL = "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" + encodeURIComponent(url);
 
             document.getElementById("qrcode").innerHTML =
                 `<img src="${qrImageURL}" style="margin-top:20px;">`;
